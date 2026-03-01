@@ -42,3 +42,43 @@
         });
     }
 })();
+
+// Commentator view auto-refresh (every 5 seconds)
+(function() {
+    const container = document.getElementById('commentator-content');
+    if (!container) return;
+
+    const slug = container.dataset.slug;
+    let paused = false;
+    const statusEl = document.getElementById('commentator-status');
+
+    async function refresh() {
+        if (paused) return;
+        try {
+            const resp = await fetch(`/events/${slug}/commentator?partial=1`);
+            if (resp.ok) {
+                const oldText = container.innerText;
+                container.innerHTML = await resp.text();
+                const newText = container.innerText;
+                if (oldText !== newText) {
+                    container.classList.add('commentator-updated');
+                    setTimeout(() => container.classList.remove('commentator-updated'), 1500);
+                }
+                if (statusEl) statusEl.textContent = '🟢 Live — ' + new Date().toLocaleTimeString();
+            }
+        } catch (e) {
+            if (statusEl) statusEl.textContent = '🔴 Connection lost — retrying...';
+        }
+    }
+
+    setInterval(refresh, 5000);
+
+    const toggleBtn = document.getElementById('commentator-toggle');
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', function() {
+            paused = !paused;
+            toggleBtn.textContent = paused ? '▶ Resume' : '⏸ Pause';
+            if (statusEl) statusEl.textContent = paused ? '⏸ Paused' : '🟢 Live';
+        });
+    }
+})();

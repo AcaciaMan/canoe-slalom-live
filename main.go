@@ -49,6 +49,69 @@ func main() {
 			}
 			return "penalty-clean"
 		},
+		"sparkRawPct": func(v interface{}) int {
+			switch r := v.(type) {
+			case *store.RunResult:
+				if r == nil || r.TotalTimeMs <= 0 {
+					return 100
+				}
+				pct := (r.RawTimeMs * 100) / r.TotalTimeMs
+				if pct > 100 {
+					pct = 100
+				}
+				if pct < 1 {
+					pct = 1
+				}
+				return pct
+			case *store.LatestRunDetail:
+				if r == nil || r.TotalTimeMs <= 0 {
+					return 100
+				}
+				pct := (r.RawTimeMs * 100) / r.TotalTimeMs
+				if pct > 100 {
+					pct = 100
+				}
+				if pct < 1 {
+					pct = 1
+				}
+				return pct
+			default:
+				return 100
+			}
+		},
+		"sub": func(a, b int) int { return a - b },
+		"sparkPenPct": func(v interface{}) int {
+			switch r := v.(type) {
+			case *store.RunResult:
+				if r == nil || r.TotalTimeMs <= 0 || r.PenaltySeconds <= 0 {
+					return 0
+				}
+				penMs := r.PenaltySeconds * 1000
+				pct := (penMs * 100) / r.TotalTimeMs
+				if pct < 1 {
+					pct = 1
+				}
+				if pct > 99 {
+					pct = 99
+				}
+				return pct
+			case *store.LatestRunDetail:
+				if r == nil || r.TotalTimeMs <= 0 || r.PenaltySeconds <= 0 {
+					return 0
+				}
+				penMs := r.PenaltySeconds * 1000
+				pct := (penMs * 100) / r.TotalTimeMs
+				if pct < 1 {
+					pct = 1
+				}
+				if pct > 99 {
+					pct = 99
+				}
+				return pct
+			default:
+				return 0
+			}
+		},
 	}
 
 	// Parse templates
@@ -59,6 +122,10 @@ func main() {
 		"judge_edit":          template.Must(template.New("layout.html").Funcs(funcMap).ParseFiles("templates/layout.html", "templates/judge_edit_run.html")),
 		"leaderboard":         template.Must(template.New("layout.html").Funcs(funcMap).ParseFiles("templates/layout.html", "templates/leaderboard.html", "templates/leaderboard_partial.html")),
 		"leaderboard_partial": template.Must(template.New("leaderboard_partial.html").Funcs(funcMap).ParseFiles("templates/leaderboard_partial.html")),
+		"gallery":             template.Must(template.New("layout.html").Funcs(funcMap).ParseFiles("templates/layout.html", "templates/gallery.html")),
+		"compare":             template.Must(template.New("layout.html").Funcs(funcMap).ParseFiles("templates/layout.html", "templates/compare.html")),
+		"commentator":         template.Must(template.New("layout.html").Funcs(funcMap).ParseFiles("templates/layout.html", "templates/commentator.html", "templates/commentator_partial.html")),
+		"commentator_partial": template.Must(template.New("commentator_partial.html").Funcs(funcMap).ParseFiles("templates/commentator_partial.html")),
 		"error":               template.Must(template.New("layout.html").Funcs(funcMap).ParseFiles("templates/layout.html", "templates/error.html")),
 	}
 
@@ -95,6 +162,9 @@ func main() {
 	})
 	mux.HandleFunc("GET /events/{slug}", deps.EventPage)
 	mux.HandleFunc("GET /events/{slug}/leaderboard", deps.LeaderboardPage)
+	mux.HandleFunc("GET /events/{slug}/photos", deps.GalleryPage)
+	mux.HandleFunc("GET /events/{slug}/commentator", deps.CommentatorPage)
+	mux.HandleFunc("GET /events/{slug}/compare", deps.ComparePage)
 	mux.HandleFunc("GET /events/{slug}/athletes/{id}", deps.AthletePage)
 
 	// Judge routes (protected by admin token auth)

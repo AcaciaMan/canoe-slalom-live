@@ -1,0 +1,101 @@
+{{define "content"}}
+<nav class="breadcrumb">
+    <a href="/events/{{.Event.Slug}}">{{.Event.Name}}</a> → Head-to-Head
+</nav>
+
+<h1 class="compare-title">
+    <span class="compare-name-a">{{.AthleteA.Athlete.Name}}</span>
+    <span class="compare-vs">vs</span>
+    <span class="compare-name-b">{{.AthleteB.Athlete.Name}}</span>
+</h1>
+
+<div class="compare-grid">
+    {{/* Athlete A column */}}
+    <div class="compare-column compare-col-a">
+        <div class="compare-athlete-header">
+            <span class="compare-bib">#{{.AthleteA.Entry.BibNumber}}</span>
+            <a href="/events/{{.Event.Slug}}/athletes/{{.AthleteA.Athlete.ID}}">{{.AthleteA.Athlete.Name}}</a>
+            <div class="compare-meta">{{.AthleteA.Entry.Club}} · {{.AthleteA.Athlete.Nation}}</div>
+        </div>
+
+        <div class="compare-run-block">
+            <h3>Run 1</h3>
+            {{if .AthleteA.Run1}}
+            <div class="compare-time">{{.AthleteA.Run1.TotalTimeFormatted}}</div>
+            <div class="compare-detail">Raw: {{.AthleteA.Run1.RawTimeFormatted}} | {{.AthleteA.Run1.PenaltyDisplay}}</div>
+            {{else}}<div class="compare-no-run">Not yet</div>{{end}}
+        </div>
+
+        <div class="compare-run-block">
+            <h3>Run 2</h3>
+            {{if .AthleteA.Run2}}
+            <div class="compare-time">{{.AthleteA.Run2.TotalTimeFormatted}}</div>
+            <div class="compare-detail">Raw: {{.AthleteA.Run2.RawTimeFormatted}} | {{.AthleteA.Run2.PenaltyDisplay}}</div>
+            {{else}}<div class="compare-no-run">Not yet</div>{{end}}
+        </div>
+
+        <div class="compare-best-block">
+            <h3>Best Time</h3>
+            {{if gt .AthleteA.BestMs 0}}
+            <div class="compare-best-time {{if and (gt .AthleteA.BestMs 0) (gt .AthleteB.BestMs 0) (le .AthleteA.BestMs .AthleteB.BestMs)}}compare-winner{{end}}">
+                {{formatTime .AthleteA.BestMs}}
+            </div>
+            {{else}}<div class="compare-no-run">—</div>{{end}}
+        </div>
+    </div>
+
+    {{/* Center divider */}}
+    <div class="compare-divider">
+        <div class="compare-vs-badge">VS</div>
+        {{if and (gt .AthleteA.BestMs 0) (gt .AthleteB.BestMs 0)}}
+        <div class="compare-diff">
+            {{if lt .AthleteA.BestMs .AthleteB.BestMs}}
+                <span class="compare-diff-value">{{.AthleteA.Athlete.Name}} by {{formatTime (sub .AthleteB.BestMs .AthleteA.BestMs)}}</span>
+            {{else if lt .AthleteB.BestMs .AthleteA.BestMs}}
+                <span class="compare-diff-value">{{.AthleteB.Athlete.Name}} by {{formatTime (sub .AthleteA.BestMs .AthleteB.BestMs)}}</span>
+            {{else}}
+                <span class="compare-diff-value">Tied!</span>
+            {{end}}
+        </div>
+        {{end}}
+    </div>
+
+    {{/* Athlete B column */}}
+    <div class="compare-column compare-col-b">
+        <div class="compare-athlete-header">
+            <span class="compare-bib">#{{.AthleteB.Entry.BibNumber}}</span>
+            <a href="/events/{{.Event.Slug}}/athletes/{{.AthleteB.Athlete.ID}}">{{.AthleteB.Athlete.Name}}</a>
+            <div class="compare-meta">{{.AthleteB.Entry.Club}} · {{.AthleteB.Athlete.Nation}}</div>
+        </div>
+
+        <div class="compare-run-block">
+            <h3>Run 1</h3>
+            {{if .AthleteB.Run1}}
+            <div class="compare-time">{{.AthleteB.Run1.TotalTimeFormatted}}</div>
+            <div class="compare-detail">Raw: {{.AthleteB.Run1.RawTimeFormatted}} | {{.AthleteB.Run1.PenaltyDisplay}}</div>
+            {{else}}<div class="compare-no-run">Not yet</div>{{end}}
+        </div>
+
+        <div class="compare-run-block">
+            <h3>Run 2</h3>
+            {{if .AthleteB.Run2}}
+            <div class="compare-time">{{.AthleteB.Run2.TotalTimeFormatted}}</div>
+            <div class="compare-detail">Raw: {{.AthleteB.Run2.RawTimeFormatted}} | {{.AthleteB.Run2.PenaltyDisplay}}</div>
+            {{else}}<div class="compare-no-run">Not yet</div>{{end}}
+        </div>
+
+        <div class="compare-best-block">
+            <h3>Best Time</h3>
+            {{if gt .AthleteB.BestMs 0}}
+            <div class="compare-best-time {{if and (gt .AthleteA.BestMs 0) (gt .AthleteB.BestMs 0) (le .AthleteB.BestMs .AthleteA.BestMs)}}compare-winner{{end}}">
+                {{formatTime .AthleteB.BestMs}}
+            </div>
+            {{else}}<div class="compare-no-run">—</div>{{end}}
+        </div>
+    </div>
+</div>
+
+<div class="compare-footer">
+    <a href="/events/{{.Event.Slug}}/leaderboard" class="back-link">← Back to Leaderboard</a>
+</div>
+{{end}}

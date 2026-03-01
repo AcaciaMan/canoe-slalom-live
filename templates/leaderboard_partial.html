@@ -33,6 +33,10 @@
                                 {{if .Run1IsNew}}<span class="badge-new">NEW</span>{{end}}
                                 <span class="run-total {{if .Run1IsBest}}run-best{{end}}">{{formatTime .Run1.TotalTimeMs}}</span>
                                 {{if gt .Run1.PenaltySeconds 0}}<span class="run-penalty {{penaltyClass .Run1}}">+{{.Run1.PenaltySeconds}}s</span>{{end}}
+                                <div class="sparkline" title="Raw: {{formatTime .Run1.RawTimeMs}} | Penalties: +{{.Run1.PenaltySeconds}}s">
+                                    <span class="spark-raw" style="width: {{sparkRawPct .Run1}}%"></span>
+                                    {{if gt .Run1.PenaltySeconds 0}}<span class="spark-penalty {{penaltyClass .Run1}}" style="width: {{sparkPenPct .Run1}}%"></span>{{end}}
+                                </div>
                             {{else}}<span class="status-dnf">{{.Run1.Status}}</span>{{end}}
                         {{else}}<span class="no-runs">—</span>{{end}}
                     </td>
@@ -42,6 +46,10 @@
                                 {{if .Run2IsNew}}<span class="badge-new">NEW</span>{{end}}
                                 <span class="run-total {{if .Run2IsBest}}run-best{{end}}">{{formatTime .Run2.TotalTimeMs}}</span>
                                 {{if gt .Run2.PenaltySeconds 0}}<span class="run-penalty {{penaltyClass .Run2}}">+{{.Run2.PenaltySeconds}}s</span>{{end}}
+                                <div class="sparkline" title="Raw: {{formatTime .Run2.RawTimeMs}} | Penalties: +{{.Run2.PenaltySeconds}}s">
+                                    <span class="spark-raw" style="width: {{sparkRawPct .Run2}}%"></span>
+                                    {{if gt .Run2.PenaltySeconds 0}}<span class="spark-penalty {{penaltyClass .Run2}}" style="width: {{sparkPenPct .Run2}}%"></span>{{end}}
+                                </div>
                             {{else}}<span class="status-dnf">{{.Run2.Status}}</span>{{end}}
                         {{else}}<span class="no-runs">—</span>{{end}}
                     </td>
@@ -56,5 +64,13 @@
     {{end}}
 </section>
 {{end}}
-<p class="leaderboard-note">Ranked by best single-run time. Penalties: gate touch = 2s, missed gate = 50s.</p>
+<p class="leaderboard-note">Ranked by best single-run time. Penalties: gate touch = 2s, missed gate = 50s. Bars show raw time (navy) vs penalties (amber/red).</p>
+{{if $.MainSponsor}}
+<p class="sponsor-powered-by">
+    Powered by
+    <a href="{{$.MainSponsor.WebsiteURL}}" target="_blank" rel="noopener">
+        <img src="{{$.MainSponsor.LogoURL}}" alt="{{$.MainSponsor.Name}}" class="sponsor-inline-logo">
+    </a>
+</p>
+{{end}}
 {{end}}

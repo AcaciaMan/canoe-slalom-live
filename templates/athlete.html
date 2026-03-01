@@ -54,5 +54,35 @@
     {{end}}
 </section>
 
+{{if .Photos}}
+<section class="athlete-photos-section">
+    <h2>📸 Photos</h2>
+    <div class="athlete-photo-grid">
+        {{range .Photos}}
+        <a href="{{.ImageURL}}" target="_blank" rel="noopener" class="athlete-photo-thumb">
+            <img src="{{.ImageURL}}" alt="{{.Caption}}" loading="lazy" title="{{.Caption}} — 📷 {{.PhotographerName}}">
+        </a>
+        {{end}}
+    </div>
+</section>
+{{end}}
+
+{{if .OtherEntries}}
+<section class="compare-section">
+    <h2>⚔️ Head-to-Head</h2>
+    <form action="/events/{{.Event.Slug}}/compare" method="GET" class="compare-form">
+        <input type="hidden" name="a" value="{{.Athlete.ID}}">
+        <label for="compare-with">Compare with:</label>
+        <select name="b" id="compare-with" required>
+            <option value="">Select athlete...</option>
+            {{range .OtherEntries}}
+            <option value="{{.AthleteID}}">#{{.BibNumber}} {{.AthleteName}}</option>
+            {{end}}
+        </select>
+        <button type="submit" class="btn-compare">Compare ⚔️</button>
+    </form>
+</section>
+{{end}}
+
 <a href="/events/{{.Event.Slug}}" class="back-link">← Back to {{.Event.Name}}</a>
 {{end}}

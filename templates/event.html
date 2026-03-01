@@ -13,6 +13,7 @@
 <div class="tab-bar">
     <a href="/events/{{.Event.Slug}}" class="tab active">Start List</a>
     <a href="/events/{{.Event.Slug}}/leaderboard" class="tab">Leaderboard</a>
+    <a href="/events/{{.Event.Slug}}/photos" class="tab">📸 Photos</a>
 </div>
 
 {{range .Categories}}
@@ -40,6 +41,25 @@
                 {{end}}
             </tbody>
         </table>
+    </div>
+</section>
+{{end}}
+
+{{if .Sponsors}}
+<section class="sponsors-section">
+    <h3 class="sponsors-heading">Supported By</h3>
+    <div class="sponsors-grid">
+        {{range .Sponsors}}
+        {{if .WebsiteURL}}
+        <a href="{{.WebsiteURL}}" target="_blank" rel="noopener" class="sponsor-card sponsor-{{.Tier}}" title="{{.Name}}">
+            <img src="{{.LogoURL}}" alt="{{.Name}}" loading="lazy">
+        </a>
+        {{else}}
+        <span class="sponsor-card sponsor-{{.Tier}}" title="{{.Name}}">
+            <img src="{{.LogoURL}}" alt="{{.Name}}" loading="lazy">
+        </span>
+        {{end}}
+        {{end}}
     </div>
 </section>
 {{end}}

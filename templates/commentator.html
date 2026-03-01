@@ -1,0 +1,15 @@
+{{define "content"}}
+<div class="commentator-page">
+    <div class="commentator-header">
+        <h1>{{.Event.Name}} <span class="commentator-label">— Commentator View</span></h1>
+        <div class="commentator-refresh-bar">
+            <span id="commentator-status">Live</span>
+            <button id="commentator-toggle" class="btn-refresh-toggle">⏸ Pause</button>
+        </div>
+    </div>
+
+    <div id="commentator-content" data-slug="{{.Event.Slug}}">
+        {{template "commentator-content" .}}
+    </div>
+</div>
+{{end}}

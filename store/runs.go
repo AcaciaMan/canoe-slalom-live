@@ -311,3 +311,53 @@ func ListRecentRuns(db *sql.DB, eventID int, limit int) ([]RecentRun, error) {
 	}
 	return recent, rows.Err()
 }
+
+// LatestRunDetail holds the most recent run with athlete and category context.
+type LatestRunDetail struct {
+	RunID          int
+	EntryID        int
+	RunNumber      int
+	RawTimeMs      int
+	PenaltyTouches int
+	PenaltyMisses  int
+	PenaltySeconds int
+	TotalTimeMs    int
+	Status         string
+	JudgedAt       string
+	AthleteID      int
+	AthleteName    string
+	AthleteClub    string
+	AthleteNation  string
+	AthleteBio     string
+	AthletePhoto   string
+	BibNumber      int
+	CategoryCode   string
+	CategoryName   string
+	CategoryID     int
+}
+
+// GetLatestRun returns the most recently judged run for an event, with full athlete context.
+func GetLatestRun(db *sql.DB, eventID int) (LatestRunDetail, error) {
+	var d LatestRunDetail
+	err := db.QueryRow(`
+		SELECT r.id, r.entry_id, r.run_number, r.raw_time_ms,
+		       r.penalty_touches, r.penalty_misses, r.penalty_seconds,
+		       r.total_time_ms, r.status, r.judged_at,
+		       a.id, a.name, a.club, a.nation, COALESCE(a.bio, ''), COALESCE(a.photo_url, ''),
+		       e.bib_number, c.code, c.name, c.id
+		FROM runs r
+		JOIN entries e ON e.id = r.entry_id
+		JOIN athletes a ON a.id = e.athlete_id
+		JOIN categories c ON c.id = e.category_id
+		WHERE e.event_id = ?
+		ORDER BY r.judged_at DESC
+		LIMIT 1`,
+		eventID,
+	).Scan(&d.RunID, &d.EntryID, &d.RunNumber, &d.RawTimeMs,
+		&d.PenaltyTouches, &d.PenaltyMisses, &d.PenaltySeconds,
+		&d.TotalTimeMs, &d.Status, &d.JudgedAt,
+		&d.AthleteID, &d.AthleteName, &d.AthleteClub, &d.AthleteNation,
+		&d.AthleteBio, &d.AthletePhoto,
+		&d.BibNumber, &d.CategoryCode, &d.CategoryName, &d.CategoryID)
+	return d, err
+}

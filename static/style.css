@@ -736,7 +736,692 @@ tbody tr:hover {
     100% { box-shadow: none; }
 }
 
+/* === Sparkline Bars === */
+.sparkline {
+    display: flex;
+    height: 4px;
+    width: 100%;
+    max-width: 120px;
+    margin-top: 3px;
+    border-radius: 2px;
+    overflow: hidden;
+    background: #f3f4f6;
+}
+
+.spark-raw {
+    display: block;
+    height: 100%;
+    background: #1e3a5f;
+    border-radius: 2px 0 0 2px;
+}
+
+.spark-penalty {
+    display: block;
+    height: 100%;
+}
+
+/* Sparkline penalty color matches existing penalty classes */
+.spark-penalty.penalty-touch {
+    background: #f59e0b;
+}
+.spark-penalty.penalty-miss {
+    background: #dc2626;
+}
+.spark-penalty.penalty-clean {
+    background: #059669;
+}
+
+.sparkline-large {
+    height: 8px;
+    max-width: 300px;
+    margin: 1rem auto 0;
+    border-radius: 4px;
+}
+
+/* === Commentator View === */
+.commentator-page {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.commentator-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.commentator-header h1 {
+    font-size: 1.5rem;
+}
+
+.commentator-label {
+    font-weight: 400;
+    color: #6b7280;
+    font-size: 1rem;
+}
+
+.commentator-refresh-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+#commentator-status {
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.commentator-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+/* Left panel — athlete info */
+.commentator-now-label {
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #9ca3af;
+    margin-bottom: 0.75rem;
+}
+
+.commentator-athlete-card {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.commentator-athlete-photo {
+    width: 120px;
+    height: 120px;
+    border-radius: 10px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.commentator-athlete-name {
+    font-size: 1.8rem;
+    margin-bottom: 0.25rem;
+}
+
+.commentator-bib {
+    color: #6b7280;
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-right: 0.25rem;
+}
+
+.commentator-athlete-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 1rem;
+    color: #4b5563;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.commentator-category-badge {
+    background: #1e3a5f;
+    color: #fff;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.commentator-bio {
+    font-size: 1.05rem;
+    color: #4b5563;
+    line-height: 1.5;
+    font-style: italic;
+    margin-top: 0.5rem;
+}
+
+/* Run result display */
+.commentator-run-result {
+    background: #f9fafb;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.commentator-run-label {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+}
+
+.commentator-time-display {
+    margin-bottom: 0.5rem;
+}
+
+.commentator-total-time {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: #1e3a5f;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+}
+
+.commentator-time-breakdown {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    font-size: 1rem;
+    color: #6b7280;
+}
+
+.commentator-penalties {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+.commentator-clean {
+    color: #059669;
+    font-weight: 600;
+}
+
+.commentator-raw {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Waiting state */
+.commentator-waiting {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #6b7280;
+}
+.commentator-waiting h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Right panel — standings */
+.commentator-standings-panel {
+    position: sticky;
+    top: 5rem;
+}
+
+.commentator-category-standings {
+    margin-bottom: 1.5rem;
+}
+
+.commentator-category-standings h3 {
+    font-size: 1rem;
+    color: #1e3a5f;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.commentator-top3-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.commentator-top3-table tr {
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.commentator-rank-col {
+    width: 2rem;
+    font-size: 1.3rem;
+    text-align: center;
+    padding: 0.5rem 0.25rem;
+}
+
+.commentator-name-col {
+    padding: 0.5rem 0.5rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.commentator-top3-bib {
+    color: #9ca3af;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-right: 0.25rem;
+}
+
+.commentator-top3-nation {
+    font-weight: 400;
+    color: #6b7280;
+    font-size: 0.85rem;
+    margin-left: 0.25rem;
+}
+
+.commentator-time-col {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    padding: 0.5rem 0.25rem;
+    font-size: 1.05rem;
+    color: #1e3a5f;
+}
+
+.commentator-no-results {
+    font-size: 0.9rem;
+    color: #9ca3af;
+    font-style: italic;
+}
+
+/* Sponsor corner */
+.commentator-sponsor {
+    margin-top: 2rem;
+    text-align: center;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+}
+.commentator-sponsor-logo {
+    max-height: 40px;
+    max-width: 180px;
+    opacity: 0.6;
+}
+.commentator-sponsor:hover .commentator-sponsor-logo {
+    opacity: 1;
+}
+
+/* Update flash animation */
+.commentator-updated {
+    animation: commentator-flash 1.5s ease-out;
+}
+@keyframes commentator-flash {
+    0% { background-color: #eff6ff; }
+    100% { background-color: transparent; }
+}
+
+/* === Photo Gallery === */
+.photo-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.photo-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+    transition: box-shadow 0.2s;
+}
+.photo-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.photo-link {
+    display: block;
+}
+
+.photo-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+}
+
+.photo-info {
+    padding: 0.75rem;
+}
+
+.photo-caption {
+    font-size: 0.9rem;
+    color: #1a1a1a;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+.photo-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+
+.photo-athlete {
+    font-weight: 600;
+    color: #2563eb;
+}
+
+/* Athlete profile photo thumbnails */
+.athlete-photos-section {
+    margin-top: 2rem;
+}
+.athlete-photos-section h2 {
+    margin-bottom: 0.75rem;
+}
+
+.athlete-photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 0.75rem;
+}
+
+.athlete-photo-thumb {
+    display: block;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.athlete-photo-thumb img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.2s;
+}
+.athlete-photo-thumb:hover img {
+    transform: scale(1.05);
+}
+
+/* === Sponsors === */
+.sponsors-section {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e5e7eb;
+    text-align: center;
+}
+
+.sponsors-heading {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #9ca3af;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.sponsors-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.sponsor-card {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s;
+}
+.sponsor-card:hover {
+    opacity: 0.7;
+    text-decoration: none;
+}
+
+/* Tier-based sizing */
+.sponsor-main img {
+    max-height: 60px;
+    max-width: 220px;
+}
+.sponsor-partner img {
+    max-height: 45px;
+    max-width: 160px;
+}
+.sponsor-supporter img {
+    max-height: 32px;
+    max-width: 120px;
+    opacity: 0.7;
+}
+.sponsor-supporter:hover img {
+    opacity: 1;
+}
+
+/* "Powered by" on leaderboard */
+.sponsor-powered-by {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #9ca3af;
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+.sponsor-powered-by a {
+    display: inline-flex;
+    align-items: center;
+}
+.sponsor-powered-by a:hover {
+    opacity: 0.7;
+    text-decoration: none;
+}
+.sponsor-inline-logo {
+    max-height: 24px;
+    max-width: 120px;
+    vertical-align: middle;
+}
+
+/* === Head-to-Head Compare === */
+.compare-title {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.compare-vs {
+    display: inline-block;
+    margin: 0 0.75rem;
+    color: #9ca3af;
+    font-weight: 400;
+    font-size: 1rem;
+}
+
+.compare-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.compare-column {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 1.5rem;
+}
+
+.compare-athlete-header {
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.compare-bib {
+    color: #6b7280;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-right: 0.25rem;
+}
+
+.compare-athlete-header a {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.compare-meta {
+    font-size: 0.85rem;
+    color: #6b7280;
+    margin-top: 0.25rem;
+}
+
+.compare-run-block {
+    border-top: 1px solid #e5e7eb;
+    padding: 1rem 0;
+}
+.compare-run-block h3 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #9ca3af;
+    margin-bottom: 0.5rem;
+}
+
+.compare-time {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1e3a5f;
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+}
+
+.compare-detail {
+    font-size: 0.85rem;
+    color: #6b7280;
+    text-align: center;
+    margin-top: 0.25rem;
+}
+
+.compare-no-run {
+    text-align: center;
+    color: #9ca3af;
+    font-style: italic;
+    padding: 0.75rem 0;
+}
+
+.compare-best-block {
+    border-top: 2px solid #1e3a5f;
+    padding: 1rem 0;
+    text-align: center;
+}
+.compare-best-block h3 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #1e3a5f;
+    margin-bottom: 0.5rem;
+}
+
+.compare-best-time {
+    font-size: 2rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    color: #1e3a5f;
+}
+
+.compare-winner {
+    color: #059669;
+}
+.compare-winner::after {
+    content: " ✓";
+    font-size: 1rem;
+}
+
+/* Center divider */
+.compare-divider {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+}
+
+.compare-vs-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #1e3a5f;
+    color: #fff;
+    font-weight: 800;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.compare-diff {
+    text-align: center;
+}
+
+.compare-diff-value {
+    font-size: 0.85rem;
+    color: #059669;
+    font-weight: 600;
+}
+
+.compare-footer {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+/* Compare form on athlete page */
+.compare-section {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.compare-form {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.compare-form label {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.compare-form select {
+    padding: 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    min-width: 200px;
+}
+
+.btn-compare {
+    background: #1e3a5f;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+.btn-compare:hover {
+    background: #2d5a8e;
+}
+
 /* === Responsive === */
+@media (max-width: 768px) {
+    .commentator-grid {
+        grid-template-columns: 1fr;
+    }
+    .commentator-total-time {
+        font-size: 2.5rem;
+    }
+    .commentator-athlete-name {
+        font-size: 1.3rem;
+    }
+    .commentator-athlete-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .commentator-athlete-meta {
+        justify-content: center;
+    }
+    .commentator-standings-panel {
+        position: static;
+    }
+}
+
 @media (max-width: 600px) {
     .header-inner {
         flex-wrap: wrap;
@@ -758,9 +1443,39 @@ tbody tr:hover {
     .col-bib { width: 50px; }
 }
 
+@media (max-width: 700px) {
+    .compare-grid {
+        grid-template-columns: 1fr;
+    }
+    .compare-divider {
+        flex-direction: row;
+        padding: 1rem 0;
+    }
+    .compare-vs-badge {
+        margin-bottom: 0;
+        margin-right: 1rem;
+    }
+    .compare-time, .compare-best-time {
+        font-size: 1.5rem;
+    }
+}
+
 @media (max-width: 500px) {
     .leaderboard-table .col-nation { display: none; }
     .leaderboard-table thead .col-nation { display: none; }
+    .sponsors-grid {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .photo-gallery {
+        grid-template-columns: 1fr;
+    }
+    .athlete-photo-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+    .photo-img {
+        height: 180px;
+    }
 }
 
 /* === Focus States === */

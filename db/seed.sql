@@ -149,3 +149,46 @@ INSERT OR IGNORE INTO runs (id, entry_id, run_number, raw_time_ms, penalty_touch
 VALUES (15, 10, 1, 97650, 0, 1, 50, 147650, 'ok', '2026-06-15T11:14:00Z');
 INSERT OR IGNORE INTO runs (id, entry_id, run_number, raw_time_ms, penalty_touches, penalty_misses, penalty_seconds, total_time_ms, status, judged_at)
 VALUES (16, 10, 2, 103440, 4, 0, 8, 111440, 'ok', '2026-06-15T15:14:00Z');
+
+-- Sponsors for Demo Slalom 2026
+INSERT OR IGNORE INTO sponsors (id, event_id, name, logo_url, website_url, tier, sort_order)
+VALUES (1, 1, 'WaterForce Energy', 'https://placehold.co/240x80/1e3a5f/ffffff?text=WaterForce+Energy', 'https://example.com/waterforce', 'main', 1);
+
+INSERT OR IGNORE INTO sponsors (id, event_id, name, logo_url, website_url, tier, sort_order)
+VALUES (2, 1, 'PaddleTech', 'https://placehold.co/160x60/2563eb/ffffff?text=PaddleTech', 'https://example.com/paddletech', 'partner', 2);
+
+INSERT OR IGNORE INTO sponsors (id, event_id, name, logo_url, website_url, tier, sort_order)
+VALUES (3, 1, 'Alpine Rapids Gear', 'https://placehold.co/160x60/059669/ffffff?text=Alpine+Rapids', 'https://example.com/alpinerapids', 'partner', 3);
+
+INSERT OR IGNORE INTO sponsors (id, event_id, name, logo_url, website_url, tier, sort_order)
+VALUES (4, 1, 'River City Tourism', 'https://placehold.co/120x45/6b7280/ffffff?text=River+City', 'https://example.com/rivercity', 'supporter', 4);
+
+INSERT OR IGNORE INTO sponsors (id, event_id, name, logo_url, website_url, tier, sort_order)
+VALUES (5, 1, 'CzechPaddle.cz', 'https://placehold.co/120x45/dc2626/ffffff?text=CzechPaddle', 'https://example.com/czechpaddle', 'supporter', 5);
+
+-- Photos for Demo Slalom 2026
+-- Athlete action shots
+INSERT OR IGNORE INTO photos (id, event_id, athlete_id, image_url, caption, photographer_name, created_at)
+VALUES (1, 1, 1, 'https://placehold.co/800x600/1e3a5f/ffffff?text=Jan+Rohan+Run+1', 'Jan Rohan navigating gate 12 on Run 1', 'Pavel Novák', '2026-06-15T10:06:00Z');
+
+INSERT OR IGNORE INTO photos (id, event_id, athlete_id, image_url, caption, photographer_name, created_at)
+VALUES (2, 1, 2, 'https://placehold.co/800x600/2563eb/ffffff?text=Oliver+Bennett+Start', 'Oliver Bennett at the start gate', 'James Wilson', '2026-06-15T10:09:00Z');
+
+INSERT OR IGNORE INTO photos (id, event_id, athlete_id, image_url, caption, photographer_name, created_at)
+VALUES (3, 1, 7, 'https://placehold.co/800x600/059669/ffffff?text=Elena+Martinez+Finish', 'Elena Martínez crossing the finish line', 'Carlos López', '2026-06-15T11:06:00Z');
+
+INSERT OR IGNORE INTO photos (id, event_id, athlete_id, image_url, caption, photographer_name, created_at)
+VALUES (4, 1, 3, 'https://placehold.co/800x600/7c3aed/ffffff?text=Mathieu+Deschamps', 'Mathieu Deschamps battling upstream gate 7', 'Pavel Novák', '2026-06-15T10:12:00Z');
+
+INSERT OR IGNORE INTO photos (id, event_id, athlete_id, image_url, caption, photographer_name, created_at)
+VALUES (5, 1, 10, 'https://placehold.co/800x600/dc2626/ffffff?text=Anna+Brezinova', 'Anna Březinová — home favourite gets the crowd roaring', 'Tereza Dvořáková', '2026-06-15T11:15:00Z');
+
+-- General event photos (no athlete)
+INSERT OR IGNORE INTO photos (id, event_id, athlete_id, image_url, caption, photographer_name, created_at)
+VALUES (6, 1, NULL, 'https://placehold.co/800x600/f59e0b/1a1a1a?text=Troja+Course+Overview', 'Troja Whitewater Course — morning setup', 'Pavel Novák', '2026-06-15T08:30:00Z');
+
+INSERT OR IGNORE INTO photos (id, event_id, athlete_id, image_url, caption, photographer_name, created_at)
+VALUES (7, 1, NULL, 'https://placehold.co/800x600/10b981/ffffff?text=Finish+Area+Crowd', 'Spectators at the finish area', 'James Wilson', '2026-06-15T12:00:00Z');
+
+INSERT OR IGNORE INTO photos (id, event_id, athlete_id, image_url, caption, photographer_name, created_at)
+VALUES (8, 1, NULL, 'https://placehold.co/800x600/6366f1/ffffff?text=Award+Ceremony', 'K1M award ceremony', 'Tereza Dvořáková', '2026-06-15T17:00:00Z');

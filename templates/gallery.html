@@ -1,0 +1,36 @@
+{{define "content"}}
+<div class="event-header">
+    <h1>{{.Event.Name}}</h1>
+    <div class="event-meta">
+        <span class="event-date">📅 {{.Event.Date}}</span>
+        <span class="event-location">📍 {{.Event.Location}}</span>
+    </div>
+</div>
+
+<div class="tab-bar">
+    <a href="/events/{{.Event.Slug}}" class="tab">Start List</a>
+    <a href="/events/{{.Event.Slug}}/leaderboard" class="tab">Leaderboard</a>
+    <a href="/events/{{.Event.Slug}}/photos" class="tab active">📸 Photos</a>
+</div>
+
+{{if .Photos}}
+<div class="photo-gallery">
+    {{range .Photos}}
+    <div class="photo-card">
+        <a href="{{.ImageURL}}" target="_blank" rel="noopener" class="photo-link">
+            <img src="{{.ImageURL}}" alt="{{.Caption}}" loading="lazy" class="photo-img">
+        </a>
+        <div class="photo-info">
+            <p class="photo-caption">{{.Caption}}</p>
+            <div class="photo-meta">
+                {{if .AthleteName}}<span class="photo-athlete">🏅 {{.AthleteName}}</span>{{end}}
+                {{if .PhotographerName}}<span class="photo-credit">📷 {{.PhotographerName}}</span>{{end}}
+            </div>
+        </div>
+    </div>
+    {{end}}
+</div>
+{{else}}
+<p class="empty-state">No photos yet — check back during the competition!</p>
+{{end}}
+{{end}}

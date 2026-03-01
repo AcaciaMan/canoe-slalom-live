@@ -1,0 +1,99 @@
+{{define "commentator-content"}}
+<div class="commentator-grid">
+    {{/* Left column: latest run + athlete info */}}
+    <div class="commentator-athlete-panel">
+        {{if .LatestRun}}
+        <div class="commentator-now-label">Latest Result</div>
+        <div class="commentator-athlete-card">
+            {{if .LatestRun.AthletePhoto}}
+            <img src="{{.LatestRun.AthletePhoto}}" alt="{{.LatestRun.AthleteName}}" class="commentator-athlete-photo">
+            {{end}}
+            <div class="commentator-athlete-info">
+                <h2 class="commentator-athlete-name">
+                    <span class="commentator-bib">#{{.LatestRun.BibNumber}}</span>
+                    {{.LatestRun.AthleteName}}
+                </h2>
+                <div class="commentator-athlete-meta">
+                    <span>{{.LatestRun.AthleteClub}}</span>
+                    <span>{{.LatestRun.AthleteNation}}</span>
+                    <span class="commentator-category-badge">{{.LatestRun.CategoryCode}}</span>
+                </div>
+                {{if .LatestRun.AthleteBio}}
+                <p class="commentator-bio">{{.LatestRun.AthleteBio}}</p>
+                {{end}}
+            </div>
+        </div>
+
+        <div class="commentator-run-result">
+            <div class="commentator-run-label">Run {{.LatestRun.RunNumber}}</div>
+            <div class="commentator-time-display">
+                <span class="commentator-total-time">{{formatTime .LatestRun.TotalTimeMs}}</span>
+            </div>
+            <div class="commentator-time-breakdown">
+                <span class="commentator-raw">Raw: {{formatTime .LatestRun.RawTimeMs}}</span>
+                {{if gt .LatestRun.PenaltySeconds 0}}
+                <span class="commentator-penalties">
+                    +{{.LatestRun.PenaltySeconds}}s
+                    ({{if gt .LatestRun.PenaltyTouches 0}}{{.LatestRun.PenaltyTouches}} touch{{if gt .LatestRun.PenaltyTouches 1}}es{{end}}{{end}}{{if and (gt .LatestRun.PenaltyTouches 0) (gt .LatestRun.PenaltyMisses 0)}}, {{end}}{{if gt .LatestRun.PenaltyMisses 0}}{{.LatestRun.PenaltyMisses}} miss{{if gt .LatestRun.PenaltyMisses 1}}es{{end}}{{end}})
+                </span>
+                {{else}}
+                <span class="commentator-clean">✅ Clean run!</span>
+                {{end}}
+            </div>
+            <div class="commentator-sparkline">
+                <div class="sparkline sparkline-large">
+                    <span class="spark-raw" style="width: {{sparkRawPct .LatestRun}}%"></span>
+                    {{if gt .LatestRun.PenaltySeconds 0}}
+                    <span class="spark-penalty {{if gt .LatestRun.PenaltyMisses 0}}penalty-miss{{else}}penalty-touch{{end}}" style="width: {{sparkPenPct .LatestRun}}%"></span>
+                    {{end}}
+                </div>
+            </div>
+        </div>
+        {{else}}
+        <div class="commentator-waiting">
+            <h2>⏳ Waiting for first run...</h2>
+            <p>The commentator view will update automatically once runs are recorded.</p>
+        </div>
+        {{end}}
+    </div>
+
+    {{/* Right column: top 3 per category */}}
+    <div class="commentator-standings-panel">
+        <div class="commentator-now-label">Current Standings</div>
+        {{range .CatTop3}}
+        <div class="commentator-category-standings">
+            <h3>{{.Category.Code}} — {{.Category.Name}}</h3>
+            {{if .Top3}}
+            <table class="commentator-top3-table">
+                <tbody>
+                    {{range .Top3}}
+                    <tr class="commentator-rank-{{.Rank}}">
+                        <td class="commentator-rank-col">
+                            {{if eq .Rank 1}}🥇{{else if eq .Rank 2}}🥈{{else if eq .Rank 3}}🥉{{end}}
+                        </td>
+                        <td class="commentator-name-col">
+                            <span class="commentator-top3-bib">#{{.BibNumber}}</span>
+                            {{.AthleteName}}
+                            <span class="commentator-top3-nation">{{.AthleteNation}}</span>
+                        </td>
+                        <td class="commentator-time-col">{{formatTime .BestTotalTimeMs}}</td>
+                    </tr>
+                    {{end}}
+                </tbody>
+            </table>
+            {{else}}
+            <p class="commentator-no-results">No results yet</p>
+            {{end}}
+        </div>
+        {{end}}
+
+        {{if .MainSponsor}}
+        <div class="commentator-sponsor">
+            <a href="{{.MainSponsor.WebsiteURL}}" target="_blank" rel="noopener">
+                <img src="{{.MainSponsor.LogoURL}}" alt="{{.MainSponsor.Name}}" class="commentator-sponsor-logo">
+            </a>
+        </div>
+        {{end}}
+    </div>
+</div>
+{{end}}

@@ -52,3 +52,23 @@ CREATE TABLE IF NOT EXISTS runs (
     judged_at        TEXT,
     UNIQUE(entry_id, run_number)
 );
+
+CREATE TABLE IF NOT EXISTS sponsors (
+    id          INTEGER PRIMARY KEY,
+    event_id    INTEGER REFERENCES events(id),
+    name        TEXT NOT NULL,
+    logo_url    TEXT NOT NULL,
+    website_url TEXT,
+    tier        TEXT NOT NULL DEFAULT 'supporter',
+    sort_order  INTEGER DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS photos (
+    id                INTEGER PRIMARY KEY,
+    event_id          INTEGER REFERENCES events(id),
+    athlete_id        INTEGER REFERENCES athletes(id),
+    image_url         TEXT NOT NULL,
+    caption           TEXT,
+    photographer_name TEXT,
+    created_at        TEXT
+);
