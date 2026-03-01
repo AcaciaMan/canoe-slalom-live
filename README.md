@@ -2,6 +2,9 @@
 
 Live timing and results for canoe/water slalom competitions. Built for grassroots events — run it on a laptop at the riverside, let spectators follow on their phones.
 
+Short introduction video:
+https://github.com/user-attachments/assets/90fe481d-032e-493f-acd4-5c0e1be7cca1
+
 ## Quick Start
 
 ```bash
