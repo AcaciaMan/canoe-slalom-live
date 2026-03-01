@@ -1,0 +1,46 @@
+{{define "content"}}
+<div class="event-header">
+    <h1>{{.Event.Name}}</h1>
+    <div class="event-meta">
+        <span class="event-date">📅 {{.Event.Date}}</span>
+        <span class="event-location">📍 {{.Event.Location}}</span>
+        {{if eq .Event.Status "active"}}<span class="badge badge-active">🟢 Active</span>
+        {{else if eq .Event.Status "finished"}}<span class="badge badge-finished">🏁 Finished</span>
+        {{else}}<span class="badge badge-draft">Draft</span>{{end}}
+    </div>
+</div>
+
+<div class="tab-bar">
+    <a href="/events/{{.Event.Slug}}" class="tab active">Start List</a>
+    <a href="/events/{{.Event.Slug}}/leaderboard" class="tab">Leaderboard</a>
+</div>
+
+{{range .Categories}}
+<section class="category-section">
+    <h2>{{.Category.Code}} — {{.Category.Name}}</h2>
+    <div class="table-wrap">
+        <table class="start-list">
+            <thead>
+                <tr>
+                    <th class="col-bib">Bib</th>
+                    <th>Athlete</th>
+                    <th>Club</th>
+                    <th class="col-nation">Nation</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{$slug := $.Event.Slug}}
+                {{range .Entries}}
+                <tr>
+                    <td class="col-bib">{{.BibNumber}}</td>
+                    <td><a href="/events/{{$slug}}/athletes/{{.AthleteID}}">{{.AthleteName}}</a></td>
+                    <td>{{.Club}}</td>
+                    <td class="col-nation">{{.Nation}}</td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+</section>
+{{end}}
+{{end}}

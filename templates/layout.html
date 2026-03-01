@@ -1,0 +1,33 @@
+{{define "layout.html"}}<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{if .Title}}{{.Title}}{{else}}Canoe Slalom Live{{end}}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="/" class="site-logo">🛶 Canoe Slalom Live</a>
+            <nav class="site-nav">
+                <a href="/events/demo-slalom-2026">Event</a>
+                <a href="/events/demo-slalom-2026/leaderboard">Leaderboard</a>
+                <a href="/judge/events/demo-slalom-2026" class="nav-judge">🏁 Judge</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        {{block "content" .}}{{end}}
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            Canoe Slalom Live — Grassroots timing made simple
+        </div>
+    </footer>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>{{end}}

@@ -1,0 +1,149 @@
+{{define "content"}}
+<div class="judge-panel">
+    <h1>⚖️ Judge Panel</h1>
+    <p class="event-subtitle">{{.Event.Name}}</p>
+
+    {{if .Success}}
+    <div class="flash flash-success">✓ {{.Success}}</div>
+    {{end}}
+    {{if .Error}}
+    <div class="flash flash-error">✗ {{.Error}}</div>
+    {{end}}
+
+    <form action="/judge/events/{{.Event.Slug}}/runs" method="POST" class="judge-form">
+
+        <!-- Category Selection -->
+        <fieldset class="form-section">
+            <legend>1. Select Category</legend>
+            <div class="radio-group">
+                {{range $i, $cat := .Categories}}
+                <label class="radio-card">
+                    <input type="radio" name="category" value="{{$cat.Category.ID}}" data-category-id="{{$cat.Category.ID}}" {{if eq $i 0}}checked{{end}}>
+                    <span class="radio-card-label">{{$cat.Category.Code}} — {{$cat.Category.Name}}</span>
+                </label>
+                {{end}}
+            </div>
+        </fieldset>
+
+        <!-- Athlete Selection -->
+        <fieldset class="form-section">
+            <legend>2. Select Athlete</legend>
+            <div class="radio-group" id="athlete-list">
+                {{range .Categories}}
+                {{$catID := .Category.ID}}
+                {{range .Entries}}
+                <label class="radio-card athlete-option" data-category-id="{{$catID}}">
+                    <input type="radio" name="entry_id" value="{{.EntryID}}">
+                    <span class="radio-card-label"><strong>#{{.BibNumber}}</strong> {{.AthleteName}}</span>
+                </label>
+                {{end}}
+                {{end}}
+            </div>
+        </fieldset>
+
+        <!-- Run Number -->
+        <fieldset class="form-section">
+            <legend>3. Run Number</legend>
+            <div class="radio-group radio-group-inline">
+                <label class="radio-card">
+                    <input type="radio" name="run_number" value="1" checked>
+                    <span class="radio-card-label">Run 1</span>
+                </label>
+                <label class="radio-card">
+                    <input type="radio" name="run_number" value="2">
+                    <span class="radio-card-label">Run 2</span>
+                </label>
+            </div>
+        </fieldset>
+
+        <!-- Raw Time -->
+        <fieldset class="form-section">
+            <legend>4. Raw Time (seconds)</legend>
+            <input type="text" name="raw_time" inputmode="decimal" placeholder="94.37" class="time-input" required autocomplete="off">
+        </fieldset>
+
+        <!-- Penalties -->
+        <fieldset class="form-section">
+            <legend>5. Penalties</legend>
+
+            <div class="penalty-row">
+                <span class="penalty-label">Gate Touches (2s each)</span>
+                <div class="stepper">
+                    <button type="button" class="stepper-btn" onclick="adjustStepper('touches', -1)">−</button>
+                    <span id="touches-display" class="stepper-value">0</span>
+                    <button type="button" class="stepper-btn" onclick="adjustStepper('touches', 1)">+</button>
+                </div>
+                <input type="hidden" name="touches" id="touches-input" value="0">
+            </div>
+
+            <div class="penalty-row">
+                <span class="penalty-label">Missed Gates (50s each)</span>
+                <div class="stepper">
+                    <button type="button" class="stepper-btn" onclick="adjustStepper('misses', -1)">−</button>
+                    <span id="misses-display" class="stepper-value">0</span>
+                    <button type="button" class="stepper-btn" onclick="adjustStepper('misses', 1)">+</button>
+                </div>
+                <input type="hidden" name="misses" id="misses-input" value="0">
+            </div>
+
+            <div class="penalty-preview" id="penalty-preview">Penalty: 0s (Clean)</div>
+        </fieldset>
+
+        <!-- Submit -->
+        <button type="submit" class="btn-submit">Record Run ✓</button>
+    </form>
+</div>
+
+<script>
+(function() {
+    // Category filtering
+    var catRadios = document.querySelectorAll('input[name="category"]');
+    var athleteOptions = document.querySelectorAll('.athlete-option');
+
+    function filterAthletes() {
+        var selectedCat = document.querySelector('input[name="category"]:checked');
+        if (!selectedCat) return;
+        var catId = selectedCat.getAttribute('data-category-id');
+        athleteOptions.forEach(function(opt) {
+            if (opt.getAttribute('data-category-id') === catId) {
+                opt.style.display = '';
+            } else {
+                opt.style.display = 'none';
+                opt.querySelector('input').checked = false;
+            }
+        });
+    }
+
+    catRadios.forEach(function(radio) {
+        radio.addEventListener('change', filterAthletes);
+    });
+    filterAthletes();
+
+    // Stepper logic
+    window.adjustStepper = function(name, delta) {
+        var input = document.getElementById(name + '-input');
+        var display = document.getElementById(name + '-display');
+        var val = parseInt(input.value) + delta;
+        if (val < 0) val = 0;
+        input.value = val;
+        display.textContent = val;
+        updatePenaltyPreview();
+    };
+
+    function updatePenaltyPreview() {
+        var touches = parseInt(document.getElementById('touches-input').value) || 0;
+        var misses = parseInt(document.getElementById('misses-input').value) || 0;
+        var total = touches * 2 + misses * 50;
+        var el = document.getElementById('penalty-preview');
+        if (total === 0) {
+            el.textContent = 'Penalty: 0s (Clean)';
+        } else {
+            var parts = [];
+            if (touches > 0) parts.push(touches + '×2');
+            if (misses > 0) parts.push(misses + '×50');
+            el.textContent = 'Penalty: ' + parts.join(' + ') + ' = ' + total + 's';
+        }
+    }
+})();
+</script>
+{{end}}

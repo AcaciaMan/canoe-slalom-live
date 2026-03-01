@@ -1,0 +1,58 @@
+{{define "content"}}
+<nav class="breadcrumb">
+    <a href="/events/{{.Event.Slug}}">{{.Event.Name}}</a> → {{.Athlete.Name}}
+</nav>
+
+<div class="athlete-profile">
+    {{if .Athlete.PhotoURL}}
+    <img src="{{.Athlete.PhotoURL}}" alt="{{.Athlete.Name}}" class="athlete-photo">
+    {{end}}
+
+    <h1>{{.Athlete.Name}} <span class="bib-badge">#{{.Entry.BibNumber}}</span></h1>
+
+    <div class="athlete-meta">
+        <span>🏅 {{.Entry.Club}}</span>
+        <span>🌍 {{.Athlete.Nation}}</span>
+    </div>
+
+    {{if .Athlete.Bio}}
+    <blockquote class="athlete-bio">
+        {{.Athlete.Bio}}
+    </blockquote>
+    {{end}}
+</div>
+
+<section class="runs-section">
+    <h2>Results</h2>
+    {{if .Runs}}
+    <div class="table-wrap">
+        <table class="runs-table">
+            <thead>
+                <tr>
+                    <th>Run #</th>
+                    <th>Raw Time</th>
+                    <th>Penalties</th>
+                    <th>Total Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .Runs}}
+                <tr>
+                    <td>{{.RunNumber}}</td>
+                    <td>{{.RawTimeFormatted}}</td>
+                    <td>{{.PenaltyDisplay}}</td>
+                    <td>{{.TotalTimeFormatted}}</td>
+                    <td>{{.Status}}</td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+    {{else}}
+    <p class="empty-state">No runs recorded yet.</p>
+    {{end}}
+</section>
+
+<a href="/events/{{.Event.Slug}}" class="back-link">← Back to {{.Event.Name}}</a>
+{{end}}

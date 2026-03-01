@@ -1,0 +1,26 @@
+{{define "content"}}
+<div class="event-header">
+    <h1>{{.Event.Name}}</h1>
+    <div class="event-meta">
+        <span class="event-date">📅 {{.Event.Date}}</span>
+        <span class="event-location">📍 {{.Event.Location}}</span>
+        {{if eq .Event.Status "active"}}<span class="badge badge-active">🟢 Active</span>
+        {{else if eq .Event.Status "finished"}}<span class="badge badge-finished">🏁 Finished</span>
+        {{else}}<span class="badge badge-draft">Draft</span>{{end}}
+    </div>
+</div>
+
+<div class="tab-bar">
+    <a href="/events/{{.Event.Slug}}" class="tab">Start List</a>
+    <a href="/events/{{.Event.Slug}}/leaderboard" class="tab active">Leaderboard</a>
+</div>
+
+<div class="refresh-bar">
+    <span id="refresh-status">Auto-refresh active</span>
+    <button id="refresh-toggle" class="btn-refresh-toggle">⏸ Pause</button>
+</div>
+
+<div id="leaderboard-content" data-slug="{{.Event.Slug}}">
+{{template "leaderboard-tables" .}}
+</div>
+{{end}}
