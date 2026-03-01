@@ -528,6 +528,214 @@ tbody tr:hover {
     margin-bottom: 2rem;
 }
 
+/* === Athlete Run Status in Judge Form === */
+.radio-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    width: 100%;
+}
+.athlete-run-status {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.8rem;
+}
+.run-done { color: #16a34a; }
+.run-pending { color: #9ca3af; }
+.athlete-done {
+    opacity: 0.5;
+    border-color: #d1d5db;
+}
+.athlete-done:has(input:checked) {
+    opacity: 1;
+}
+
+/* === Confirmation Panel === */
+.confirmation-panel {
+    background: #f0f9ff;
+    border: 3px solid #2563eb;
+    border-radius: 12px;
+    padding: 2rem;
+    max-width: 500px;
+    margin: 0 auto;
+}
+.confirmation-panel h2 {
+    text-align: center;
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+    color: #1e3a5f;
+}
+.confirm-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e0e7ff;
+    font-size: 1.1rem;
+}
+.confirm-row:last-of-type {
+    border-bottom: 2px solid #2563eb;
+    font-weight: 700;
+    font-size: 1.3rem;
+}
+.confirm-label { color: #6b7280; }
+.confirm-value { font-weight: 600; }
+.confirm-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+.btn-back {
+    flex: 1;
+    height: 64px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    background: #f3f4f6;
+    color: #374151;
+    border: 2px solid #d1d5db;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.btn-confirm {
+    flex: 2;
+    height: 64px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    background: #16a34a;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.btn-confirm:hover { background: #15803d; }
+.btn-back:hover { background: #e5e7eb; }
+
+/* === Edit Run === */
+.edit-run-context {
+    background: #f0f9ff;
+    border: 2px solid #bfdbfe;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+.edit-actions {
+    margin-bottom: 1rem;
+}
+.delete-form {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+.btn-delete {
+    width: 100%;
+    height: 48px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #991b1b;
+    background: #fff;
+    border: 2px solid #fecaca;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.btn-delete:hover {
+    background: #fee2e2;
+}
+.edit-link {
+    font-size: 0.8rem;
+    text-decoration: none;
+    margin-left: 0.25rem;
+}
+.back-link {
+    display: inline-block;
+    margin-top: 1rem;
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 500;
+}
+.back-link:hover {
+    text-decoration: underline;
+}
+
+/* === Recent Runs === */
+.recent-runs {
+    margin-bottom: 1.5rem;
+    padding: 0.75rem;
+    background: #f9fafb;
+    border-radius: 8px;
+    font-size: 0.85rem;
+}
+.recent-runs h3 {
+    font-size: 0.9rem;
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+}
+.recent-run-item {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    margin: 0.15rem;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
+/* === Leaderboard UX Enhancements === */
+.badge-new {
+    display: inline-block;
+    background: #2563eb;
+    color: #fff;
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    animation: pulse-new 2s ease-in-out infinite;
+    vertical-align: middle;
+    margin-right: 0.25rem;
+}
+@keyframes pulse-new {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+.run-best {
+    font-weight: 700;
+    color: #1e3a5f;
+}
+.run-penalty {
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 0.15rem;
+}
+.run-total {
+    font-size: 0.9rem;
+}
+.time-behind {
+    display: inline-block;
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-left: 0.5rem;
+    font-weight: 400;
+}
+.new-run-row {
+    background: #eff6ff !important;
+}
+.new-run-row:hover {
+    background: #dbeafe !important;
+}
+.rank-1 { border-left: none; }
+.rank-2 { border-left: none; }
+.rank-3 { border-left: none; }
+.col-rank {
+    font-size: 1.1rem;
+}
+.leaderboard-updated {
+    animation: flash-update 1.5s ease-out;
+}
+@keyframes flash-update {
+    0% { box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.4); }
+    100% { box-shadow: none; }
+}
+
 /* === Responsive === */
 @media (max-width: 600px) {
     .header-inner {
@@ -553,4 +761,18 @@ tbody tr:hover {
 @media (max-width: 500px) {
     .leaderboard-table .col-nation { display: none; }
     .leaderboard-table thead .col-nation { display: none; }
+}
+
+/* === Focus States === */
+input:focus, select:focus {
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;
+}
+
+/* === Print Styles === */
+@media print {
+    .site-header, .site-footer, .site-nav, .tab-bar, .refresh-bar, .judge-panel { display: none; }
+    .container { max-width: 100%; }
+    .badge-new { animation: none; }
+    body { font-size: 12pt; }
 }

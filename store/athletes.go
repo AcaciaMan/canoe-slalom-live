@@ -10,6 +10,7 @@ import (
 type EntryWithAthlete struct {
 	EntryID       int
 	EventID       int
+	CategoryID    int
 	BibNumber     int
 	StartPosition int
 	AthleteID     int
@@ -31,7 +32,7 @@ func GetAthlete(db *sql.DB, id int) (domain.Athlete, error) {
 // ListEntriesByCategory returns entries joined with athlete data, ordered by start_position.
 func ListEntriesByCategory(db *sql.DB, categoryID int) ([]EntryWithAthlete, error) {
 	rows, err := db.Query(`
-		SELECT e.id, e.event_id, e.bib_number, e.start_position, a.id, a.name, a.club, a.nation
+		SELECT e.id, e.event_id, e.category_id, e.bib_number, e.start_position, a.id, a.name, a.club, a.nation
 		FROM entries e
 		JOIN athletes a ON a.id = e.athlete_id
 		WHERE e.category_id = ?
@@ -46,7 +47,7 @@ func ListEntriesByCategory(db *sql.DB, categoryID int) ([]EntryWithAthlete, erro
 	var entries []EntryWithAthlete
 	for rows.Next() {
 		var ea EntryWithAthlete
-		if err := rows.Scan(&ea.EntryID, &ea.EventID, &ea.BibNumber, &ea.StartPosition, &ea.AthleteID, &ea.AthleteName, &ea.Club, &ea.Nation); err != nil {
+		if err := rows.Scan(&ea.EntryID, &ea.EventID, &ea.CategoryID, &ea.BibNumber, &ea.StartPosition, &ea.AthleteID, &ea.AthleteName, &ea.Club, &ea.Nation); err != nil {
 			return nil, err
 		}
 		entries = append(entries, ea)
@@ -58,11 +59,11 @@ func ListEntriesByCategory(db *sql.DB, categoryID int) ([]EntryWithAthlete, erro
 func GetEntryByEventAndAthlete(db *sql.DB, eventID, athleteID int) (EntryWithAthlete, error) {
 	var ea EntryWithAthlete
 	err := db.QueryRow(`
-		SELECT e.id, e.event_id, e.bib_number, e.start_position, a.id, a.name, a.club, a.nation
+		SELECT e.id, e.event_id, e.category_id, e.bib_number, e.start_position, a.id, a.name, a.club, a.nation
 		FROM entries e
 		JOIN athletes a ON a.id = e.athlete_id
 		WHERE e.event_id = ? AND e.athlete_id = ?`,
 		eventID, athleteID,
-	).Scan(&ea.EntryID, &ea.EventID, &ea.BibNumber, &ea.StartPosition, &ea.AthleteID, &ea.AthleteName, &ea.Club, &ea.Nation)
+	).Scan(&ea.EntryID, &ea.EventID, &ea.CategoryID, &ea.BibNumber, &ea.StartPosition, &ea.AthleteID, &ea.AthleteName, &ea.Club, &ea.Nation)
 	return ea, err
 }

@@ -19,14 +19,33 @@
             <tbody>
                 {{$slug := $.Event.Slug}}
                 {{range .Rows}}
-                <tr{{if eq .Rank 1}} class="rank-1"{{else if eq .Rank 2}} class="rank-2"{{else if eq .Rank 3}} class="rank-3"{{end}}>
-                    <td class="col-rank">{{if gt .Rank 0}}#{{.Rank}}{{else}}<span class="no-runs">—</span>{{end}}</td>
+                <tr class="{{if eq .Rank 1}}rank-1{{else if eq .Rank 2}}rank-2{{else if eq .Rank 3}}rank-3{{end}}{{if or .Run1IsNew .Run2IsNew}} new-run-row{{end}}">
+                    <td class="col-rank">{{if eq .Rank 1}}🥇{{else if eq .Rank 2}}🥈{{else if eq .Rank 3}}🥉{{else if gt .Rank 0}}#{{.Rank}}{{else}}<span class="no-runs">—</span>{{end}}</td>
                     <td class="col-bib">{{.BibNumber}}</td>
-                    <td><a href="/events/{{$slug}}/athletes/{{.AthleteID}}">{{.AthleteName}}</a></td>
+                    <td>
+                        <a href="/events/{{$slug}}/athletes/{{.AthleteID}}">{{.AthleteName}}</a>
+                        {{if gt .TimeBehindMs 0}}<span class="time-behind">+{{formatTime .TimeBehindMs}}</span>{{end}}
+                    </td>
                     <td class="col-nation">{{.AthleteNation}}</td>
-                    <td class="col-run">{{if .Run1}}{{if eq .Run1.Status "ok"}}{{if gt .Run1.PenaltySeconds 0}}<span class="run-time">{{formatTime .Run1.RawTimeMs}}</span> + <span class="{{if gt .Run1.PenaltyMisses 0}}penalty-miss{{else}}penalty-touch{{end}}">{{.Run1.PenaltySeconds}}s</span> = {{formatTime .Run1.TotalTimeMs}}{{else}}<span class="penalty-clean">{{formatTime .Run1.TotalTimeMs}}</span>{{end}}{{else}}<span class="status-dnf">{{.Run1.Status}}</span>{{end}}{{else}}<span class="no-runs">—</span>{{end}}</td>
-                    <td class="col-run">{{if .Run2}}{{if eq .Run2.Status "ok"}}{{if gt .Run2.PenaltySeconds 0}}<span class="run-time">{{formatTime .Run2.RawTimeMs}}</span> + <span class="{{if gt .Run2.PenaltyMisses 0}}penalty-miss{{else}}penalty-touch{{end}}">{{.Run2.PenaltySeconds}}s</span> = {{formatTime .Run2.TotalTimeMs}}{{else}}<span class="penalty-clean">{{formatTime .Run2.TotalTimeMs}}</span>{{end}}{{else}}<span class="status-dnf">{{.Run2.Status}}</span>{{end}}{{else}}<span class="no-runs">—</span>{{end}}</td>
-                    <td class="col-best">{{if .HasRuns}}{{if gt .BestTotalTimeMs 0}}<strong>{{formatTime .BestTotalTimeMs}}</strong>{{else}}<span class="no-runs">—</span>{{end}}{{else}}<span class="no-runs">—</span>{{end}}</td>
+                    <td class="col-run">
+                        {{if .Run1}}
+                            {{if eq .Run1.Status "ok"}}
+                                {{if .Run1IsNew}}<span class="badge-new">NEW</span>{{end}}
+                                <span class="run-total {{if .Run1IsBest}}run-best{{end}}">{{formatTime .Run1.TotalTimeMs}}</span>
+                                {{if gt .Run1.PenaltySeconds 0}}<span class="run-penalty {{penaltyClass .Run1}}">+{{.Run1.PenaltySeconds}}s</span>{{end}}
+                            {{else}}<span class="status-dnf">{{.Run1.Status}}</span>{{end}}
+                        {{else}}<span class="no-runs">—</span>{{end}}
+                    </td>
+                    <td class="col-run">
+                        {{if .Run2}}
+                            {{if eq .Run2.Status "ok"}}
+                                {{if .Run2IsNew}}<span class="badge-new">NEW</span>{{end}}
+                                <span class="run-total {{if .Run2IsBest}}run-best{{end}}">{{formatTime .Run2.TotalTimeMs}}</span>
+                                {{if gt .Run2.PenaltySeconds 0}}<span class="run-penalty {{penaltyClass .Run2}}">+{{.Run2.PenaltySeconds}}s</span>{{end}}
+                            {{else}}<span class="status-dnf">{{.Run2.Status}}</span>{{end}}
+                        {{else}}<span class="no-runs">—</span>{{end}}
+                    </td>
+                    <td class="col-best">{{if gt .BestTotalTimeMs 0}}<strong>{{formatTime .BestTotalTimeMs}}</strong>{{else}}<span class="no-runs">—</span>{{end}}</td>
                 </tr>
                 {{end}}
             </tbody>

@@ -15,7 +15,7 @@ var seedSQL string
 
 // Open opens the SQLite database at dbPath, enables foreign keys, and runs migrations.
 func Open(dbPath string) (*sql.DB, error) {
-	database, err := sql.Open("sqlite3", dbPath)
+	database, err := sql.Open("sqlite3", dbPath+"?_journal_mode=WAL&_busy_timeout=5000")
 	if err != nil {
 		return nil, err
 	}

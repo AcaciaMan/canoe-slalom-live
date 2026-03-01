@@ -1,5 +1,5 @@
 {{define "content"}}
-<div class="judge-panel">
+<div class="judge-panel" data-selected-cat="{{.SelectedCat}}">
     <h1>⚖️ Judge Panel</h1>
     <p class="event-subtitle">{{.Event.Name}}</p>
 
@@ -10,7 +10,20 @@
     <div class="flash flash-error">✗ {{.Error}}</div>
     {{end}}
 
-    <form action="/judge/events/{{.Event.Slug}}/runs" method="POST" class="judge-form">
+    {{if .RecentRuns}}
+    <div class="recent-runs">
+        <h3>Recent Runs</h3>
+        {{range .RecentRuns}}
+        <span class="recent-run-item">
+            <strong>#{{.BibNumber}}</strong> {{.CategoryCode}} R{{.RunNumber}} {{formatTime .TotalTimeMs}}
+            {{if eq .PenaltySeconds 0}}(Clean){{else}}({{.PenaltySeconds}}s pen){{end}}
+            <a href="/judge/events/{{$.Event.Slug}}/runs/{{.ID}}/edit" class="edit-link">✏️</a>
+        </span>
+        {{end}}
+    </div>
+    {{end}}
+
+    <form action="/judge/events/{{.Event.Slug}}/runs" method="POST" class="judge-form" id="judge-form">
 
         <!-- Category Selection -->
         <fieldset class="form-section">
@@ -32,9 +45,15 @@
                 {{range .Categories}}
                 {{$catID := .Category.ID}}
                 {{range .Entries}}
-                <label class="radio-card athlete-option" data-category-id="{{$catID}}">
+                <label class="radio-card athlete-option {{if and .HasRun1 .HasRun2}}athlete-done{{end}}" data-category-id="{{$catID}}" data-has-run1="{{.HasRun1}}" data-has-run2="{{.HasRun2}}">
                     <input type="radio" name="entry_id" value="{{.EntryID}}">
-                    <span class="radio-card-label"><strong>#{{.BibNumber}}</strong> {{.AthleteName}}</span>
+                    <div class="radio-card-content">
+                        <span class="radio-card-label"><strong>#{{.BibNumber}}</strong> {{.AthleteName}}</span>
+                        <span class="athlete-run-status">
+                            <span class="{{if .HasRun1}}run-done{{else}}run-pending{{end}}">R1: {{if .HasRun1}}✓ {{.Run1Time}}{{else}}—{{end}}</span>
+                            <span class="{{if .HasRun2}}run-done{{else}}run-pending{{end}}">R2: {{if .HasRun2}}✓ {{.Run2Time}}{{else}}—{{end}}</span>
+                        </span>
+                    </div>
                 </label>
                 {{end}}
                 {{end}}
@@ -90,20 +109,45 @@
         </fieldset>
 
         <!-- Submit -->
-        <button type="submit" class="btn-submit">Record Run ✓</button>
+        <button type="button" class="btn-submit" onclick="showConfirmation()">Review Run →</button>
     </form>
+
+    <!-- Confirmation Panel -->
+    <div id="confirmation-panel" class="confirmation-panel" style="display:none">
+        <h2>CONFIRM RUN ENTRY</h2>
+        <div class="confirm-row"><span class="confirm-label">Athlete</span><span class="confirm-value" id="conf-athlete"></span></div>
+        <div class="confirm-row"><span class="confirm-label">Category</span><span class="confirm-value" id="conf-category"></span></div>
+        <div class="confirm-row"><span class="confirm-label">Run</span><span class="confirm-value" id="conf-run"></span></div>
+        <div class="confirm-row"><span class="confirm-label">Raw Time</span><span class="confirm-value" id="conf-rawtime"></span></div>
+        <div class="confirm-row"><span class="confirm-label">Touches</span><span class="confirm-value" id="conf-touches"></span></div>
+        <div class="confirm-row"><span class="confirm-label">Misses</span><span class="confirm-value" id="conf-misses"></span></div>
+        <div class="confirm-row"><span class="confirm-label">Total Penalty</span><span class="confirm-value" id="conf-penalty"></span></div>
+        <div class="confirm-row"><span class="confirm-label">TOTAL TIME</span><span class="confirm-value" id="conf-total"></span></div>
+        <div class="confirm-buttons">
+            <button type="button" class="btn-back" onclick="hideConfirmation()">← Back</button>
+            <button type="button" class="btn-confirm" onclick="document.getElementById('judge-form').submit()">Confirm ✓</button>
+        </div>
+    </div>
 </div>
 
 <script>
 (function() {
-    // Category filtering
+    var panel = document.getElementById('judge-panel');
+    var selectedCat = parseInt(document.querySelector('.judge-panel').getAttribute('data-selected-cat')) || 0;
     var catRadios = document.querySelectorAll('input[name="category"]');
     var athleteOptions = document.querySelectorAll('.athlete-option');
 
+    // Pre-select category from query param
+    if (selectedCat > 0) {
+        catRadios.forEach(function(r) {
+            r.checked = (parseInt(r.value) === selectedCat);
+        });
+    }
+
     function filterAthletes() {
-        var selectedCat = document.querySelector('input[name="category"]:checked');
-        if (!selectedCat) return;
-        var catId = selectedCat.getAttribute('data-category-id');
+        var selectedRadio = document.querySelector('input[name="category"]:checked');
+        if (!selectedRadio) return;
+        var catId = selectedRadio.getAttribute('data-category-id');
         athleteOptions.forEach(function(opt) {
             if (opt.getAttribute('data-category-id') === catId) {
                 opt.style.display = '';
@@ -118,6 +162,20 @@
         radio.addEventListener('change', filterAthletes);
     });
     filterAthletes();
+
+    // Auto-select run number when athlete changes
+    document.querySelectorAll('input[name="entry_id"]').forEach(function(radio) {
+        radio.addEventListener('change', function() {
+            var card = this.closest('.athlete-option');
+            var hasRun1 = card.getAttribute('data-has-run1') === 'true';
+            var hasRun2 = card.getAttribute('data-has-run2') === 'true';
+            if (!hasRun1) {
+                document.querySelector('input[name="run_number"][value="1"]').checked = true;
+            } else if (!hasRun2) {
+                document.querySelector('input[name="run_number"][value="2"]').checked = true;
+            }
+        });
+    });
 
     // Stepper logic
     window.adjustStepper = function(name, delta) {
@@ -144,6 +202,54 @@
             el.textContent = 'Penalty: ' + parts.join(' + ') + ' = ' + total + 's';
         }
     }
+
+    // Format milliseconds as M:SS.xx
+    function fmtTime(ms) {
+        if (ms <= 0) return '0:00.00';
+        var m = Math.floor(ms / 60000);
+        var s = Math.floor((ms % 60000) / 1000);
+        var h = Math.floor((ms % 1000) / 10);
+        return m + ':' + (s < 10 ? '0' : '') + s + '.' + (h < 10 ? '0' : '') + h;
+    }
+
+    // Confirmation flow
+    window.showConfirmation = function() {
+        var entryRadio = document.querySelector('input[name="entry_id"]:checked');
+        if (!entryRadio) { alert('Please select an athlete.'); return; }
+        var runRadio = document.querySelector('input[name="run_number"]:checked');
+        if (!runRadio) { alert('Please select a run number.'); return; }
+        var rawTimeInput = document.querySelector('input[name="raw_time"]');
+        var rawTimeVal = parseFloat(rawTimeInput.value);
+        if (!rawTimeVal || rawTimeVal <= 0) { alert('Please enter a valid raw time.'); return; }
+
+        var athleteCard = entryRadio.closest('.athlete-option');
+        var athleteLabel = athleteCard.querySelector('.radio-card-label').textContent.trim();
+        var catRadio = document.querySelector('input[name="category"]:checked');
+        var catLabel = catRadio ? catRadio.closest('.radio-card').querySelector('.radio-card-label').textContent.trim() : '';
+
+        var touches = parseInt(document.getElementById('touches-input').value) || 0;
+        var misses = parseInt(document.getElementById('misses-input').value) || 0;
+        var penaltySec = touches * 2 + misses * 50;
+        var rawTimeMs = Math.round(rawTimeVal * 1000);
+        var totalMs = rawTimeMs + penaltySec * 1000;
+
+        document.getElementById('conf-athlete').textContent = athleteLabel;
+        document.getElementById('conf-category').textContent = catLabel;
+        document.getElementById('conf-run').textContent = 'Run ' + runRadio.value;
+        document.getElementById('conf-rawtime').textContent = fmtTime(rawTimeMs);
+        document.getElementById('conf-touches').textContent = touches > 0 ? touches + ' × 2s = ' + (touches*2) + 's' : '0';
+        document.getElementById('conf-misses').textContent = misses > 0 ? misses + ' × 50s = ' + (misses*50) + 's' : '0';
+        document.getElementById('conf-penalty').textContent = penaltySec > 0 ? penaltySec + 's' : '0s (Clean)';
+        document.getElementById('conf-total').textContent = fmtTime(totalMs);
+
+        document.getElementById('judge-form').style.display = 'none';
+        document.getElementById('confirmation-panel').style.display = '';
+    };
+
+    window.hideConfirmation = function() {
+        document.getElementById('confirmation-panel').style.display = 'none';
+        document.getElementById('judge-form').style.display = '';
+    };
 })();
 </script>
 {{end}}

@@ -13,8 +13,10 @@ import (
 
 // Deps holds shared dependencies for handlers.
 type Deps struct {
-	DB    *sql.DB
-	Tmpls map[string]*template.Template
+	DB         *sql.DB
+	Tmpls      map[string]*template.Template
+	AdminToken string
+	Sessions   *SessionStore
 }
 
 // CategoryWithEntries pairs a category with its start list entries.
