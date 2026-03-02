@@ -35,6 +35,8 @@ ADMIN_TOKEN=secret123 go run main.go -seed
 - **SQLite** — embedded via `github.com/mattn/go-sqlite3` (CGo), WAL mode, single `data.db` file
 - **Vanilla HTML/CSS/JS** — no build step, no framework, no bundler
 
+It’s a single Go + SQLite binary that can run on a small VPS or services like Google Cloud Run.
+
 ## Pages
 
 | Route | Page | Description |
